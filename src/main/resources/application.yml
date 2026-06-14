@@ -1,18 +1,25 @@
 spring:
   application:
     name: flexbenefits
+
+# Datasource
   datasource:
     url: jdbc:postgresql://localhost:5432/flexbenefits
     username: flexuser
     password: flexpass
+
+#JPA
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: true
+
+# Flayway
   flyway:
     enable: true
     locations: classpath:db/migration
 
+#Actuator
 management:
   endpoints:
     web:
@@ -22,6 +29,7 @@ management:
     env:
       enabled: true
 
+#App Info
 info:
   app:
     name: FlexBenefits
@@ -30,3 +38,9 @@ info:
 
 server:
   port: 8080
+
+#JWT
+jwt:
+  secret: dGhpcyBpcyBhIHZlcnkgbG9uZyBzZWNyZXQga2V5IGZvciBmbGV4YmVuZWZpdHMgand0IHNpZ25pbmc=
+  expiration: 86400000 # example for 24 hours in milliseconds
+

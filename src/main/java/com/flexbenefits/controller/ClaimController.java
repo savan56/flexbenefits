@@ -1,5 +1,6 @@
 package com.flexbenefits.controller;
 
+import com.flexbenefits.config.TenantContext;
 import com.flexbenefits.dto.ClaimResponse;
 import com.flexbenefits.dto.CreateClaimRequest;
 import com.flexbenefits.dto.UpdateClaimRequest;
@@ -23,51 +24,46 @@ public class ClaimController {
 
     @PostMapping
     public ResponseEntity<ClaimResponse> createClaim(
-            @RequestHeader("X-Tenant-ID") UUID tenantId,
             @Valid @RequestBody CreateClaimRequest request) {
+        UUID tenantId = TenantContext.getTenantId();
         ClaimResponse response = claimService.createClaim(tenantId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ClaimResponse>> getClaims(
-            @RequestHeader("X-Tenant-ID") UUID tenantId,
-            Pageable pageable) {
+    public ResponseEntity<Page<ClaimResponse>> getClaims(Pageable pageable) {
+        UUID tenantId = TenantContext.getTenantId();
         Page<ClaimResponse> claims = claimService.getClaims(tenantId, pageable);
         return ResponseEntity.ok(claims);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClaimResponse> getClaimById(
-            @RequestHeader("X-Tenant-ID") UUID tenantId,
-            @PathVariable UUID id) {
+    public ResponseEntity<ClaimResponse> getClaimById(@PathVariable UUID id) {
+        UUID tenantId = TenantContext.getTenantId();
         ClaimResponse response = claimService.getClaimById(tenantId, id);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ClaimResponse> updateClaim(
-            @RequestHeader("X-Tenant-ID") UUID tenantId,
             @PathVariable UUID id,
             @Valid @RequestBody UpdateClaimRequest request) {
+        UUID tenantId = TenantContext.getTenantId();
         ClaimResponse response = claimService.updateClaim(tenantId, id, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClaim(
-            @RequestHeader("X-Tenant-ID") UUID tenantId,
-            @PathVariable UUID id) {
+    public ResponseEntity<Void> deleteClaim(@PathVariable UUID id) {
+        UUID tenantId = TenantContext.getTenantId();
         claimService.deleteClaim(tenantId, id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/submit")
-    public ResponseEntity<ClaimResponse> submitClaim(
-            @RequestHeader("X-Tenant-ID") UUID tenantId,
-            @PathVariable UUID id) {
+    public ResponseEntity<ClaimResponse> submitClaim(@PathVariable UUID id) {
+        UUID tenantId = TenantContext.getTenantId();
         ClaimResponse response = claimService.submitClaim(tenantId, id);
         return ResponseEntity.ok(response);
     }
 }
-
